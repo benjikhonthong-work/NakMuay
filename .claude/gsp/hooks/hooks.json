@@ -1,0 +1,165 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-runtime-edit.sh"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/gsp-context-recovery.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "gsp-project-designer",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-project-designer agent just finished. Verify: (1) at least one design/screen-*.md chunk was written, (2) design/INDEX.md was written. Report any missing deliverables to the user."
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-project-designer"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-project-researcher",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-project-researcher"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-project-critic",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-project-critic agent just finished. Verify: (1) critique/critique.md was written with a heuristics score, (2) critique/prioritized-fixes.md was written, (3) critique/strengths.md was written. Report any missing deliverables to the user."
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-project-critic"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-creative-director",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-creative-director agent just finished. Verify: (1) identity/INDEX.md was written, (2) identity/color-system.md exists, (3) identity/typography.md exists, (4) identity/logo-directions.md exists, (5) identity/imagery-style.md exists. Report any missing deliverables to the user."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-engineer",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-engineer agent just finished. Verify: (1) a .yml preset was written, (2) STYLE.md was written, (3) guidelines.html was written, (4) components/token-mapping.md was written, (5) INDEX.md was written. Report any missing deliverables to the user."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-project-builder",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-project-builder agent just finished. Verify: (1) a log file was written under build/logs/ (foundations.md, component-*.md, or screen-*.md depending on execution mode), (2) no files were left with TODO/FIXME placeholder code. Note: build/INDEX.md is written at finalize, not by individual agents — do not flag its absence. Report any missing deliverables to the user."
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-project-builder"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-project-reviewer",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-project-reviewer agent just finished. Verify: (1) acceptance-report.md was written, (2) issues.md was written, (3) review/INDEX.md was written, (4) verdict is clearly stated as Pass, Conditional Pass, or Fail. Report any issues to the user."
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-project-reviewer"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-accessibility-auditor",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-accessibility-auditor agent just finished. Verify: (1) accessibility-audit.md was written, (2) accessibility-fixes.md was written. Report any missing deliverables to the user."
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PROJECT_ROOT}/scripts/check-artifact-size.sh gsp-accessibility-auditor"
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-auditor",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-auditor agent just finished. Verify: (1) audit/INDEX.md was written, (2) audit/brand-inventory.md exists, (3) audit/coherence-assessment.md exists, (4) audit/market-fit.md exists, (5) audit/equity-analysis.md exists, (6) audit/evolution-map.md exists. Report any missing deliverables to the user."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-researcher",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-researcher agent just finished. Verify: (1) discover/INDEX.md was written, (2) discover/market-landscape.md exists, (3) discover/competitive-audit.md exists, (4) discover/trend-analysis.md exists, (5) discover/mood-board-direction.md exists. Report any missing deliverables to the user."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-strategist",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-strategist agent just finished. Verify: (1) strategy/INDEX.md was written, (2) strategy/positioning.md exists, (3) strategy/archetype.md exists, (4) strategy/brand-platform.md exists, (5) strategy/voice-and-tone.md exists, (6) strategy/messaging.md exists. Report any missing deliverables to the user."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-polisher",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-polisher agent just finished. Verify: (1) polish/findings.md was written, (2) polish/INDEX.md was written. (3) If any safe-auto fixes were applied, verify scripts/polish-safety-wrap.sh was used (look for absence of orphaned .polish-stash-ref files in the project root). (4) Confirm any rolled-back findings appear in polish/findings.md with a rollback-reason. Report any missing deliverables or orphaned stash refs."
+          }
+        ]
+      },
+      {
+        "matcher": "gsp-brand-coherence",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "The gsp-brand-coherence agent just finished. Verify: (1) the coherence verdict was written to patterns/INDEX.md or returned in stdout (the agent doesn't always emit a file — its primary output is a Pass/Fail/Conditional verdict on archetype tension and intensity dial alignment). (2) If coherence verdict was Fail or Conditional Pass, surface this to the user before continuing the pipeline. Report any missing verdict."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log — NakMuay Prototype</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="proto-bar"><a href="index.html">Index</a><a href="today.html">Today</a><a href="checkin.html">Check-in</a><a href="brain-alert.html">Alert</a><a href="log-session.html" aria-current="page">[Log]</a><a href="protocol.html">Protocol</a><a href="weight.html">Weight</a><a href="post-weighin.html">Post-weigh-in</a><span class="frs">FR-07 08 09 11</span></nav>
+<main class="wrap">
+<div class="group">
+  <span class="camp">Build · บันทึกเซสชัน</span>
+  <h1 style="margin-top:16px">บันทึกการซ้อม</h1>
+  <p class="muted">ประมาณ 30 วินาที</p>
+</div>
+
+<div class="group">
+  <p class="label">1 · ประเภทการซ้อม</p>
+  <div class="card">
+    <div class="chips">
+      <button class="chip" type="button" aria-pressed="false">สปาร์ริง</button>
+      <button class="chip" type="button" aria-pressed="false">มวยเทคนิค</button>
+      <button class="chip" type="button" aria-pressed="false">คาร์ดิโอ</button>
+      <button class="chip" type="button" aria-pressed="true">ยกเวท</button>
+    </div>
+    <p class="muted" style="margin-top:12px">แต่ละประเภทลงคนละหมวดการฟื้นตัว จึงต้องเลือกให้ตรง</p>
+  </div>
+</div>
+
+<div class="group">
+  <p class="label">2 · รายละเอียดยกเวท</p>
+  <div class="card">
+    <p class="muted" style="margin-bottom:8px">ส่วนของร่างกาย</p>
+    <div class="chips"><button class="chip" type="button" aria-pressed="true">ท่อนบน</button><button class="chip" type="button" aria-pressed="false">ท่อนล่าง</button><button class="chip" type="button" aria-pressed="false">ทั้งตัว</button></div>
+    <p class="muted" style="margin:16px 0 8px">ความหนัก</p>
+    <div class="chips"><button class="chip" type="button" aria-pressed="false">เบา</button><button class="chip" type="button" aria-pressed="true">กลาง</button><button class="chip" type="button" aria-pressed="false">หนัก</button></div>
+    <p class="muted" style="margin:16px 0 8px">ระยะเวลา</p>
+    <div class="stat"><span class="n">45</span><span class="u">นาที</span></div>
+  </div>
+</div>
+
+<div class="group">
+  <p class="label">3 · ถ้าเลือกสปาร์ริง จะถามเพิ่มสองข้อ</p>
+  <div class="card">
+    <div class="kv"><span class="k">จำนวนยก</span><span class="v">จำเป็นต้องระบุ</span></div>
+    <div class="kv"><span class="k">ระดับความหนัก</span><span class="v">เบา / กลาง / หนัก</span></div>
+    <p class="muted" style="margin-top:12px">สองค่านี้เป็นตัวป้อนของยอดสะสมสปาร์ริง ซึ่งนับแยกจากโหลดประเภทอื่น</p>
+  </div>
+</div>
+
+<div class="group">
+  <p class="label">4 · จุดที่ปวด</p>
+  <div class="card">
+    <div class="bodymap">
+      <button class="spot" type="button" aria-pressed="true">มือ / ข้อมือ <span class="n">ระดับ 2</span></button>
+      <button class="spot" type="button" aria-pressed="true">ไหล่ <span class="n">ระดับ 3</span></button>
+      <button class="spot" type="button" aria-pressed="false">คอ <span class="n">—</span></button>
+      <button class="spot" type="button" aria-pressed="false">หลังล่าง <span class="n">—</span></button>
+      <button class="spot" type="button" aria-pressed="false">สะโพก <span class="n">—</span></button>
+      <button class="spot" type="button" aria-pressed="false">น่อง <span class="n">—</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="group">
+  <a class="btn" href="protocol.html">บันทึกเซสชัน</a>
+  <p class="muted" style="margin-top:12px"><span class="inline ok">[บันทึกแล้ว 18:42]</span></p>
+</div>
+</main></body></html>

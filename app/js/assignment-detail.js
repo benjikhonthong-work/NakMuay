@@ -40,7 +40,7 @@ async function load() {
       ["Date assigned", fmtDate(a.assignedOn)],
       ["Planned duration", mins(a.plannedDurationSec)],
       ["Status", esc(STATUS_LABEL[a.status] || a.status)],
-      ["Status changed by", esc(a.statusChangedBy || "athlete")],
+      ["Status changed by", esc(a.statusChangedBy || "\u2014 nobody yet, it is still pending")],
       ["Document id", "<code>" + esc(a.id) + "</code>"]
     ].map(([k, v]) => '<div class="kv"><span class="k">' + k + '</span><span class="v">' + v + "</span></div>").join("");
 

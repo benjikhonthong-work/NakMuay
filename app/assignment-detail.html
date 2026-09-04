@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protocol detail — NakMuay</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <a class="brand" href="index.html">NakMuay</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="assignments.html" aria-current="page">Protocols</a>
+      <a href="new-assignment.html">New</a>
+      <a href="seed.html">Seed data</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <div class="group" id="head"><p class="muted">Loading…</p></div>
+  <div class="group" id="body" hidden>
+    <p class="label">Record</p>
+    <div class="card" id="fields"></div>
+
+    <p class="label" style="margin-top:32px">How it felt <span style="text-transform:none;letter-spacing:0">— the field the AI step will read</span></p>
+    <div class="card">
+      <div class="field">
+        <textarea id="howItFelt" placeholder="Write how the protocol felt."></textarea>
+      </div>
+      <button class="btn-2" type="button" id="saveNote" style="margin-top:0">Save note</button>
+    </div>
+
+    <p class="label" style="margin-top:32px">Change status</p>
+    <div class="card">
+      <p class="muted" style="margin-top:0">You change this yourself. There is no approver in this system — finishing the timer marks it done, walking away marks it skipped.</p>
+      <div class="btnrow" style="margin-top:12px">
+        <button class="btn" type="button" id="mkDone">Mark completed</button>
+        <button class="btn-2" type="button" id="mkSkip" style="margin-top:0">Mark skipped</button>
+      </div>
+    </div>
+
+    <p class="label" style="margin-top:32px">Attempts <span style="text-transform:none;letter-spacing:0">— subcollection under this record</span></p>
+    <div class="card" id="attempts"></div>
+    <p class="status" id="status"></p>
+    <div class="group"><a class="btn-2" href="assignments.html">Back to the list</a></div>
+  </div>
+</main>
+<footer><div class="in">
+  NakMuay · Module 2 homework build. Firestore runs in Test mode with sample data only — no real personal data.
+  Recovery protocols shown here are examples and are not medical advice.
+</div></footer>
+<script type="module" src="js/assignment-detail.js"></script>
+</body>
+</html>

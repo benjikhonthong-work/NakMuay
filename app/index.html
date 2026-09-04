@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NakMuay — Recovery protocols</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <a class="brand" href="index.html">NakMuay</a>
+    <nav class="nav">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="assignments.html">Protocols</a>
+      <a href="new-assignment.html">New</a>
+      <a href="seed.html">Seed data</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <div class="group">
+    <span class="camp">Build · 34 days to fight</span>
+    <h1 style="margin-top:16px">Recovery protocols</h1>
+    <p class="muted">One protocol per day, chosen for whichever domain is your ceiling. You mark it done or skipped yourself — nobody approves anything here.</p>
+  </div>
+
+  <div class="group">
+    <div class="card">
+      <div class="kv"><span class="k">Protocols assigned</span><span class="v num" id="cAssign">—</span></div>
+      <div class="kv"><span class="k">Completed</span><span class="v num" id="cDone">—</span></div>
+      <div class="kv"><span class="k">Skipped</span><span class="v num" id="cSkip">—</span></div>
+      <div class="kv"><span class="k">Still pending</span><span class="v num" id="cPend">—</span></div>
+    </div>
+    <p class="status" id="status"></p>
+  </div>
+
+  <div class="group">
+    <div class="btnrow">
+      <a class="btn" href="assignments.html">See all protocols</a>
+      <a class="btn-2" href="new-assignment.html">Assign a protocol</a>
+    </div>
+  </div>
+
+  <div class="group">
+    <p class="label">How this maps to the project docs</p>
+    <div class="card">
+      <div class="kv"><span class="k">One protocol per day, never more</span><span class="v">FR-28</span></div>
+      <div class="kv"><span class="k">Athlete marks it done or skipped</span><span class="v">FR-29</span></div>
+      <div class="kv"><span class="k">Next-day effect is measured per athlete</span><span class="v">FR-30</span></div>
+      <div class="kv"><span class="k">Chosen scope for this module</span><span class="v"><a href="../SCOPE.md">SCOPE.md</a></span></div>
+    </div>
+  </div>
+</main>
+<footer><div class="in">
+  NakMuay · Module 2 homework build. Firestore runs in Test mode with sample data only — no real personal data.
+  Recovery protocols shown here are examples and are not medical advice.
+</div></footer>
+<script type="module">
+  import { listAssignments } from "./js/db.js";
+  const el = id => document.getElementById(id);
+  const st = el("status");
+  st.textContent = "Loading from Firestore…"; st.className = "status busy";
+  try {
+    const rows = await listAssignments();
+    const by = s => rows.filter(r => r.status === s).length;
+    el("cAssign").textContent = rows.length;
+    el("cDone").textContent = by("completed");
+    el("cSkip").textContent = by("skipped");
+    el("cPend").textContent = by("pending");
+    st.textContent = rows.length
+      ? "Read " + rows.length + " documents from Firestore."
+      : "Firestore is empty. Open the Seed data page to add the sample records.";
+    st.className = "status " + (rows.length ? "ok" : "err");
+  } catch (e) {
+    st.textContent = "Could not read Firestore: " + e.message;
+    st.className = "status err";
+  }
+</script>
+</body>
+</html>

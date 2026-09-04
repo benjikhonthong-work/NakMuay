@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protocols — NakMuay</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <a class="brand" href="index.html">NakMuay</a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="assignments.html" aria-current="page">Protocols</a>
+      <a href="new-assignment.html">New</a>
+      <a href="seed.html">Seed data</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  <div class="group">
+    <h1>Assigned protocols</h1>
+    <p class="muted">Read live from the <code>protocolAssignments</code> collection in Firestore, newest first.</p>
+  </div>
+
+  <div class="group">
+    <p class="label">Filter by status</p>
+    <div class="chips" id="filters">
+      <button class="chip" type="button" aria-pressed="true"  data-f="all">All</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="pending">Pending</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="completed">Completed</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="skipped">Skipped</button>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="card" id="list"><p class="muted" style="margin:0">Loading…</p></div>
+    <p class="status" id="status"></p>
+  </div>
+</main>
+<footer><div class="in">
+  NakMuay · Module 2 homework build. Firestore runs in Test mode with sample data only — no real personal data.
+  Recovery protocols shown here are examples and are not medical advice.
+</div></footer>
+<script type="module" src="js/assignments.js"></script>
+</body>
+</html>

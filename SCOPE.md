@@ -1,39 +1,88 @@
-# SCOPE — NakMuay recovery protocol tracker
+# SCOPE — ขอบเขตที่เลือกทำ (การบ้าน Week 6)
 
-**What the system stores:** one recovery protocol given to one professional boxer on one
-day, together with the status the boxer sets on it themselves and the attempts they
-actually made at it.
+โครงงาน **NakMuay** — แอปติดตามการฟื้นตัวสำหรับนักมวยอาชีพ
+Repo: <https://github.com/benjikhonthong-work/NakMuay> · Firebase project: `nakmuay-8f508`
 
-This file is the Week 6 homework scope. It replaces the LeaveEasy lab's leave-request
-domain with the NakMuay project, and it keeps the same nine decisions the lab asks for.
+---
 
-## The nine decisions
+## ประโยคเดียวตามแบบของใบงาน
 
-| # | Decision | This project | Why |
+> **ระบบของฉันเก็บ** *ใบโปรโตคอลฟื้นตัวรายวัน (protocolAssignments)* **ที่** *นักมวยเจ้าของข้อมูลเอง*
+> **สร้างขึ้น** แต่ละรายการเลือก **ประเภท** *โปรโตคอลฟื้นตัวจากคลัง `protocols` (Neuro deload,
+> Sleep extension, Fuel top-up)* ได้ และมีสถานะ **`pending`** → **`completed`** หรือ
+> **`skipped`** โดย **นักมวยคนเดิม** เป็นคนกดเปลี่ยน
+
+**ในระบบนี้ไม่มีผู้อนุมัติ** ไม่มีโค้ช ไม่มีผู้จัดการ — เพราะข้อ 2.2 ของ requirement spec
+กำหนดไว้ว่าเป็นระบบ role เดียว คือนักมวยใช้กับตัวเอง แถวที่ใกล้เคียงที่สุดในคู่มือเลือก
+ขอบเขตคือ **📡 IoT / เซ็นเซอร์ — ใบแจ้งเตือนที่ต้องมีคนกดรับทราบ** ซึ่งเจ้าของอุปกรณ์เป็นคน
+กดเปลี่ยนสถานะเอง ไม่ใช่คนอื่นมาอนุมัติ
+
+---
+
+## ตารางขอบเขต
+
+### ก. เทียบกับ LeaveEasy — 6 องค์ประกอบที่ Module 2 ต้องใช้
+
+| LeaveEasy (ใบงานตัวอย่าง) | ระบบของฉันคืออะไร | ชื่อที่ฉันสร้างจริง |
+|---|---|---|
+| `leaveRequests` = โฟลเดอร์หลัก | ใบโปรโตคอลฟื้นตัว 1 ใบ = นักมวย 1 คน ใน 1 วัน | **`protocolAssignments`** (5 เอกสารตัวอย่าง `pa001`–`pa005`) |
+| `users` = คนที่ใช้ระบบ | นักมวยอาชีพ เจ้าของข้อมูล | **`athletes`** (3 เอกสาร `a001`–`a003`) |
+| `leaveTypes` = ประเภทที่เลือกได้ | คลังโปรโตคอลฟื้นตัว 1 โปรโตคอล = 1 domain | **`protocols`** (3 เอกสาร `p001`–`p003`) |
+| `approvals` = โฟลเดอร์ย่อย | แต่ละครั้งที่นักมวยลงมือทำโปรโตคอลจริง | **`attempts`** — subcollection ใต้ `protocolAssignments/{id}` (3 เอกสาร) |
+| สถานะที่เปลี่ยน | ยังไม่ทำ → ทำแล้ว หรือ ข้ามไป | **`pending` → `completed` \| `skipped`** (FR-28, FR-29) |
+| `requesterName` = ช่องที่จดชื่อซ้ำ | ชื่อนักมวยและชื่อโปรโตคอล ต้องมีในเอกสารหลักด้วย เพราะ Firestore ไม่มี JOIN | **`athleteName`**, **`protocolName`**, **`targetDomain`** (denormalised ทั้งสามช่อง) |
+
+### ข. ตารางตัดสินใจ 9 บรรทัด
+
+| # | เรื่องที่ต้องตัดสิน | ที่เลือก | เหตุผล |
 |---|---|---|---|
-| 1 | Main collection | `protocolAssignments` | One document = one protocol assigned to one boxer for one date. This is the thing the app is about, so it is the collection every page reads from. |
-| 2 | Category / lookup collection | `protocols` | The library of recovery protocols (Neuro deload, Sleep extension, Fuel top-up). An assignment points at one of these instead of repeating its text. |
-| 3 | Subcollection | `attempts` under a `protocolAssignments` document | A boxer often does a protocol in pieces — 12 minutes in the morning, the rest at night. Each try is one document under the assignment it belongs to. |
-| 4 | Owner field | `athleteId` (with `athleteName` denormalised beside it) | Firestore has no JOIN, so the list page needs the name in the same document. `athleteId` is the real link to `athletes`. |
-| 5 | Statuses | `pending` · `completed` · `skipped` | Exactly the three values already defined in FR-28 / FR-29 of the requirement spec, so the homework adds no new vocabulary to the project. |
-| 6 | Who creates a record | The boxer (นักมวย) | The app is for professional boxers using it on themselves. Section 2.2 of the spec has one role only. |
-| 7 | Who changes the status | The same boxer | **There is no approver in this system.** A skipped protocol is information, not a request that someone grants. The lab's IoT example works the same way — the device owner moves its own record along. |
-| 8 | Long text field | `howItFelt` on the assignment | Free text the boxer writes after finishing or skipping. It is the one field that carries a reason a number cannot, and it is the only field the homework adds to the documented data model. |
-| 9 | Week 8 AI task | Read the `howItFelt` text across recent assignments and name the pattern that keeps blocking recovery | The app already knows *which* domain is the limiting factor from the numbers. The text is where the *why* is — "media day moved", "gym was loud", "slept badly before travel". That is a language problem, not an arithmetic one. |
+| 1 | โฟลเดอร์หลัก | `protocolAssignments` | 1 เอกสาร = 1 โปรโตคอล ให้นักมวย 1 คน ใน 1 วัน เป็นสิ่งที่แอปนี้พูดถึง ทุกหน้าจออ่านจาก collection นี้ |
+| 2 | โฟลเดอร์ประเภท | `protocols` | คลังโปรโตคอล ใบงานชี้ไปที่นี่แทนการพิมพ์ข้อความซ้ำในทุกใบ |
+| 3 | โฟลเดอร์ย่อย | `attempts` ใต้เอกสาร `protocolAssignments` | นักมวยมักทำโปรโตคอลแบ่งหลายรอบต่อวัน — เช้า 12 นาที ที่เหลือตอนกลางคืน แต่ละรอบเป็น 1 เอกสาร |
+| 4 | ช่องเจ้าของ | `athleteId` (มี `athleteName` เก็บซ้ำไว้ข้าง ๆ) | Firestore ไม่มี JOIN หน้ารายการจึงต้องมีชื่ออยู่ในเอกสารเดียวกัน ส่วน `athleteId` คือลิงก์จริงไปที่ `athletes` |
+| 5 | สถานะ | `pending` · `completed` · `skipped` | เป็นค่าที่ FR-28 / FR-29 ของ requirement spec กำหนดไว้แล้ว การบ้านนี้จึงไม่เพิ่มคำใหม่ให้โครงงาน |
+| 6 | คนสร้างรายการ | นักมวย | ข้อ 2.2 ของ spec มี role เดียว |
+| 7 | คนกดเปลี่ยนสถานะ | **นักมวยคนเดิม** | ระบบนี้ไม่มีผู้อนุมัติ การข้ามโปรโตคอลคือข้อมูล ไม่ใช่คำขอที่ต้องมีใครอนุญาต ตัวอย่าง IoT ในคู่มือทำแบบเดียวกัน |
+| 8 | ช่องข้อความยาว | `howItFelt` บนเอกสารหลัก | นักมวยเขียนเองหลังทำเสร็จหรือหลังข้าม เป็นช่องเดียวที่บอกเหตุผลที่ตัวเลขบอกไม่ได้ และเป็นช่องเดียวที่การบ้านนี้เพิ่มเข้าไปในผังข้อมูลเดิม |
+| 9 | งาน AI ใน Week 8 | อ่าน `howItFelt` ของหลาย ๆ วัน แล้วบอกว่า "อะไรคือสิ่งที่ขัดขวางการฟื้นตัวซ้ำ ๆ" | ตัวเลขบอกได้แล้วว่า domain ไหนเป็น limiting factor แต่ *ทำไม* อยู่ในข้อความ — "งานแถลงข่าวเลื่อน", "ยิมเสียงดัง", "นอนไม่พอก่อนเดินทาง" นั่นคือปัญหาทางภาษา ไม่ใช่ทางเลขคณิต |
 
-## What is deliberately out of scope
+---
 
-- **No coach, no manager, no approval step.** Adding one would change the role model in
-  section 2.2 of the requirement spec, and the whole product is built around the boxer
-  reading their own body.
-- **No diagnosis.** NFR-04. The app names a limiting factor; it never names an injury.
-- **No help cutting weight faster.** NFR-05. `Fuel top-up` is explicitly the opposite.
-- **No single overall score.** FR-23. The limiting factor is the *lowest* domain, never an
-  average of the six.
+## เช็ก 6 องค์ประกอบครบตามขั้น 0
 
-## Related documents
+- [x] **โฟลเดอร์หลัก** — `protocolAssignments`
+- [x] **คนที่ใช้ระบบ** — `athletes`
+- [x] **ประเภทที่เลือกได้** — `protocols`
+- [x] **โฟลเดอร์ย่อยของเฉพาะรายการ** — `attempts`
+- [x] **สถานะที่เปลี่ยนได้ และคนที่กดเปลี่ยน** — `pending → completed | skipped` โดยนักมวยเอง
+- [x] **ช่องที่จดชื่อซ้ำ (denormalised)** — `athleteName`, `protocolName`, `targetDomain`
 
-- Requirement spec — `docs/01-requirements/01-spec/20260828-01-boxer-recovery-tracking.md`
-- Data model for this build — `docs/02-design/02-technical/data-model-firestore.md`
-- Existing database spec — `docs/02-design/02-technical/db-spec.md`
-- Notes on the `docs/` folder for this homework — `docs/README.md`
+---
+
+## สิ่งที่ตัดออกจากขอบเขตโดยเจตนา
+
+- **ไม่มีโค้ช ไม่มีผู้จัดการ ไม่มีขั้นอนุมัติ** — ถ้าเพิ่มเข้ามาต้องแก้ role model ในข้อ 2.2
+  ของ requirement spec และทั้งตัวสินค้าถูกออกแบบให้นักมวยอ่านร่างกายตัวเอง
+- **ไม่วินิจฉัยโรค** (NFR-04) แอปบอกได้แค่ว่า domain ไหนเป็น limiting factor ไม่บอกว่าเป็น
+  อาการบาดเจ็บอะไร
+- **ไม่ช่วยลดน้ำหนักให้เร็วขึ้น** (NFR-05) โปรโตคอล `Fuel top-up` ทำสิ่งตรงกันข้าม
+- **ไม่มีคะแนนรวมค่าเดียว** (FR-23) limiting factor คือ domain ที่ **ต่ำสุด** ไม่ใช่ค่าเฉลี่ย
+  ของทั้ง 6 domain
+- **ยังไม่มี Auth** `athleteId` จึงเลือกจาก dropdown ยังไม่ได้มาจากผู้ใช้ที่ล็อกอิน
+
+## ไม่มีข้อมูลจริงของบุคคลอื่นในฐานข้อมูล
+
+ชื่อนักมวยทั้ง 3 คนและข้อความ `howItFelt` ทั้งหมดเป็นข้อมูลสมมติที่แต่งขึ้นสำหรับการบ้านนี้
+Firestore อยู่ใน Test mode จึงเก็บเฉพาะข้อมูลตัวอย่าง
+
+---
+
+## เอกสารที่เกี่ยวข้อง
+
+| เอกสาร | เนื้อหา |
+|---|---|
+| [`docs/02-design/02-technical/data-model-firestore.md`](docs/02-design/02-technical/data-model-firestore.md) | ผังข้อมูลขั้น B — ER diagram + ตารางทุก field ที่โค้ดใช้จริง |
+| [`docs/01-requirements/01-spec/20260828-01-boxer-recovery-tracking.md`](docs/01-requirements/01-spec/20260828-01-boxer-recovery-tracking.md) | requirement spec ต้นทาง FR-01…FR-33, NFR-01…NFR-09 |
+| [`docs/02-design/02-technical/db-spec.md`](docs/02-design/02-technical/db-spec.md) | ผังข้อมูลเชิงแนวคิด ยังไม่ผูกกับฐานข้อมูลตัวใด |
+| [`docs/README.md`](docs/README.md) | อธิบายโฟลเดอร์ `docs/` และเรื่องภาพ Firebase Console |
+| [`app/`](app/) | โค้ดเว็บที่อ่าน–เขียน Firestore จริง 5 หน้า |
